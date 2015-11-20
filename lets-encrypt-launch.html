@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Let's encrypt – Launching a free CA</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="reveal.js/css/reveal.css">
+		<link rel="stylesheet" href="reveal.js/css/theme/mine.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="reveal.js/lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'reveal.js/css/print/pdf.css' : 'reveal.js/css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<img data-src="/le-logo.png" width="160px">
+					<h1>Let's Encrypt</h1>
+          <h3>Launching a free CA</h3>
+					<p>
+						<small>Roland Shoemaker / <a href="http://twitter.com/rolandshoemaker">@rolandshoemaker</a></small><br/>
+            <small>Technology Fellow, EFF</small>
+					</p>
+          <img data-src="/eff.png" width="140px">
+				</section>
+
+        <section>
+          <h2>What</h2>
+          <ul>
+            <li>
+              New widely trusted certificate authority
+              <ul>
+                <li>Open source</li>
+                <li>Based on the ACME protocol (currently draft RFC)</li>
+                <li>Golang based backend services and (official) Python client</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Who</h2>
+          EFF, ISRG, University of Michigan, Mozilla, et al
+        </section>
+
+        <section>
+          <h2>Why?</h2>
+        </section>
+
+        <section>
+          <img width="80%", data-src="ca-graph.png">
+        </section>
+
+        <section>
+          <h2>Server (Boulder)</h2>
+          <img data-src="boulder.jpg" width="300px">
+          <ul>
+            <li>Completely open source</li>
+            <li>Set of services written in Golang</li>
+            <li>All actions handled through a ACME based API</li>
+            <li>Protocol and server have been audited by NCC Group</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Client</h2>
+          <img data-src="client.gif" width="300px">
+        </section>
+
+        <section>
+          <h2>What we aren't doing</h2>
+          <ul>
+            <li>Wildcards (until WG decides on validation plan)</li>
+            <li>Longer than 90 day validity</li>
+            <li>EV or OV certificates (due to validation requirements)</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Launch time line</h2>
+          <ul>
+            <li>Planning begins -- ???</li>
+            <li>Development begins -- Dec 20, 2014 (mb?)</li>
+            <li>Closed beta begins -- Sept 11, 2015</li>
+            <li>Invite only beta beings -- Oct 19, 2015</li>
+            <li>Open beta begins -- Dec 3, 2015</li>
+            <li>Actual launch date -- ???</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Hurdles</h2>
+        </section>
+
+        <section>
+          <h2>Adoption</h2>
+        </section>
+
+        <section>
+          <h2>Observed adoption</h2>
+        </section>
+
+        <section>
+          <h2>Rapid reissuance testing</h2>
+        </section>
+
+        <section>
+          <h2>CA league table</h2>
+        </section>
+
+        <section>
+          <h2>Cool peeps using our certs</h2>
+        </section>
+
+        <section>
+          <h2>Third party integrations</h2>
+        </section>
+
+        <section>
+          <h2>Third party clients</h2>
+        </section>
+
+        <section>
+          <h2>Future</h2>
+        </section>
+
+        <section>
+          <h1>Thanks!</h1>
+          <h3>Questions?</h3>
+          <p>
+            roland@eff.org<br/><small style="font-family: monospace;">B244 C64A 677C AFBF 051B 4029 3B5F BC45 DC51 7F79</small><br/>
+            ca-dev@letsencrypt.org<br/>
+            client-dev@letsencrypt.org<br/>
+            <a>https://letsencrypt.org/ </a><br/>
+            <a>https://github.com/letsencrypt</a>
+          </p>
+
+        </section>
+
+			</div>
+
+		</div>
+
+		<script src="reveal.js/lib/js/head.min.js"></script>
+		<script src="reveal.js/js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'none', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'reveal.js/plugin/zoom-js/zoom.js', async: true },
+					{ src: 'reveal.js/plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
