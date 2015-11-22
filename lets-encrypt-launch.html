@@ -30,7 +30,7 @@
 		</script>
 
 		<!--[if lt IE 9]>
-		<script src="lib/js/html5shiv.js"></script>
+		<script src="reveal.js/lib/js/html5shiv.js"></script>
 		<![endif]-->
 	</head>
 
@@ -57,45 +57,86 @@
             <li>
               New widely trusted certificate authority
               <ul>
+                <li>FREE!</li>
                 <li>Open source</li>
                 <li>Based on the ACME protocol (currently draft RFC)</li>
                 <li>Golang based backend services and (official) Python client</li>
               </ul>
+            </li>
+            <li>
+              Single command issuance & installation
+              <p style="font-family: monospace;">sudo letsencrypt run</p>
             </li>
           </ul>
         </section>
 
         <section>
           <h2>Who</h2>
-          EFF, ISRG, University of Michigan, Mozilla, et al
+          <p>Originally two EFF and Mozilla projects merged under ISRG (Internet Security Research Group)</p>
+          <p>Developers from EFF, ISRG, University of Michigan, Mozilla, et al</p>
         </section>
 
         <section>
-          <h2>Why?</h2>
+          <h2>Sponsors</h2>
+          <img data-src="le-sponsors.png" style="width:65%;">
         </section>
 
         <section>
-          <img width="80%", data-src="ca-graph.png">
+          <h1>Why?</h1>
         </section>
 
         <section>
-          <h2>Server (Boulder)</h2>
-          <img data-src="boulder.jpg" width="300px">
-          <ul>
-            <li>Completely open source</li>
-            <li>Set of services written in Golang</li>
-            <li>All actions handled through a ACME based API</li>
-            <li>Protocol and server have been audited by NCC Group</li>
-          </ul>
+          <h2>Prevalence & privacy/safety implications of HTTP</h2>
         </section>
 
         <section>
-          <h2>Client</h2>
-          <img data-src="client.gif" width="300px">
+          <h2>Issuance and installation complexity</h2>
+          <li>Complexity of SSL issuance, installation, and configuration</li>
+        </section>
+
+        <section>
+          <h2>Poor security track record</h2>
+          <img data-src="bad-cas.png">
+        </section>
+
+        <section>
+          <h2>Lax CA/B requirements</h2>
+          <img data-src="cab.png">
+        </section>
+
+
+        <section>
+          <h2>Ridiculous number of roots</h2>
+          <img style="width:75%;", data-src="ca-graph.png">
+        </section>
+
+        <section data-background="guh.gif">
+        </section>
+
+        <section>
+          <h1>Solution</h1>
+        </section>
+
+        <section>
+          <h2>ACME</h2>
+          <img data-src="acme.jpg" style="width:50%;">
+        </section>
+
+        <section>
+          <h2 style="font-family: monospace;">boulder</h2>
+          <img data-src="boulder.jpg" style="width:50%">
+          <p>Entirely open source CA, licensed under MPLv2, written in Golang, and audited by NCC Group</p>
+        </section>
+
+        <section>
+          <h2 style="font-family: monospace;">letsencrypt</h2>
+          <img data-src="client.gif">
+          <p>Official fully automated client with plugins for Apache and nginx that handle installation and certificate life-cycle management</p>
         </section>
 
         <section>
           <h2>What we aren't doing</h2>
+          <img data-src="Frowning-Dog.png">
           <ul>
             <li>Wildcards (until WG decides on validation plan)</li>
             <li>Longer than 90 day validity</li>
@@ -116,19 +157,20 @@
         </section>
 
         <section>
-          <h2>Hurdles</h2>
+          <h1>Hurdles</h1>
         </section>
 
         <section>
-          <h2>Adoption</h2>
+          <img data-src="papers.jpg">
+            <p>PITR and WebTrust audits</p>
+        </section>
+
+        <section>
+          <h1>Adoption</h1>
         </section>
 
         <section>
           <h2>Observed adoption</h2>
-        </section>
-
-        <section>
-          <h2>Rapid reissuance testing</h2>
         </section>
 
         <section>
@@ -148,7 +190,7 @@
         </section>
 
         <section>
-          <h2>Future</h2>
+          <h1>Future</h1>
         </section>
 
         <section>
