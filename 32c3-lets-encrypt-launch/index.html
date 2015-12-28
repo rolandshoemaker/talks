@@ -4,10 +4,10 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>Let's encrypt – Launching a free CA</title>
+		<title>Let's Encrypt – Launching a free CA</title>
 
-		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
-		<meta name="author" content="Hakim El Hattab">
+		<meta name="description" content="Slides for talk at 32c3 on the launch of Let's Encrypt">
+		<meta name="author" content="Roland Shoemaker">
 
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -18,7 +18,7 @@
 		<link rel="stylesheet" href="../reveal.js/css/theme/mine.css" id="theme">
 
 		<!-- Code syntax highlighting -->
-		<link rel="stylesheet" href="../reveal.js/lib/css/zenburn.css">
+		<!-- <link rel="stylesheet" href="../reveal.js/lib/css/zenburn.css"> -->
 
 		<!-- Printing and PDF exports -->
 		<script>
@@ -41,169 +41,370 @@
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 				<section>
-					<img data-src="/le-logo.png" width="160px">
-					<h1>Let's Encrypt</h1>
-          <h3>Launching a free CA</h3>
-					<p>
-						<small>Roland Shoemaker / <a href="http://twitter.com/rolandshoemaker">@rolandshoemaker</a></small><br/>
-            <small>Technology Fellow, EFF</small>
-					</p>
-          <img data-src="/eff.png" width="140px">
+					<img data-src="le-logo.png" style="width:20%;">
+          <h1>Launching a free CA</h1>
+						<p>Roland Shoemaker / <a href="http://twitter.com/rolandshoemaker">@rolandshoemaker</a></p>
+            <p>Technology Consultant, EFF</p>
+          <img data-src="eff.png" style="width:15%;">
 				</section>
 
         <section>
-          <h2>What</h2>
+          <h2>What is SSL/TLS?</h2>
+          <img data-src="ssl-proto.png" style="width:100%;">
           <ul>
-            <li>
-              New trusted certificate authority
-              <ul>
-                <li>FREE!</li>
-                <li>Open source</li>
-                <li>Based on the ACME protocol (currently draft RFC)</li>
-                <li>Golang based backend services and (official) Python client</li>
-              </ul>
-            </li>
-            <li>
-              Single command issuance & installation
-              <p style="font-family: monospace;">sudo letsencrypt run</p>
-            </li>
+            <li>Standardized low-level cryptographic transport protocol</li>
+            <li>Provides confidentiality + integrity + authenticity</li>
+            <li>HTTPS is just HTTP wrapped with TLS</li>
+            <li>Uses signed digital certificates to prove identity</li>
+            <li>Certificate Authorities control issuance of trusted certificates</li>
           </ul>
+
+          <aside class="notes">
+            <ul>
+              <li>first SSL protocol standard was written in 1995 for netscape</li>
+              <li>5 major revisions, currently 6th is in draft stage (TLS 1.3)</li>
+              <li>TLS is the modern name for SSL (due to legal reasons...)</li>
+            </ul>
+          </aside>
         </section>
 
         <section>
-          <h2>Who</h2>
-          <p>Originally two EFF and Mozilla projects merged under ISRG (Internet Security Research Group)</p>
-          <p>Developers from EFF, ISRG, University of Michigan, Mozilla, et al</p>
-        </section>
-
-        <section>
-          <h2>Sponsors</h2>
-          <img data-src="le-sponsors.png" style="width:65%;">
-        </section>
-
-        <section>
-          <h1>Why?</h1>
-        </section>
-
-        <section>
-          <h2>Prevalence & privacy/safety implications of HTTP</h2>
-        </section>
-
-        <section>
-          <h2>Issuance and installation complexity</h2>
-          <li>Complexity of SSL issuance, installation, and configuration</li>
-        </section>
-
-        <section>
-          <h2>Poor security track record</h2>
-          <img data-src="bad-cas.png">
-        </section>
-
-        <section>
-          <h2>Lax CA/B requirements</h2>
-          <img data-src="cab.png">
-        </section>
-
-
-        <section>
-          <h2>Ridiculous number of roots</h2>
-          <img style="width:75%;", data-src="ca-graph.png">
-        </section>
-
-        <section data-background="guh.gif">
-        </section>
-
-        <section>
-          <h1>Solution</h1>
-        </section>
-
-        <section>
-          <h2>ACME</h2>
-          <img data-src="acme.jpg" style="width:50%;">
-        </section>
-
-        <section>
-          <h2 style="font-family: monospace;">boulder</h2>
-          <img data-src="boulder.jpg" style="width:50%">
-          <p>Entirely open source CA, licensed under MPLv2, written in Golang, and audited by NCC Group</p>
-        </section>
-
-        <section>
-          <h2 style="font-family: monospace;">letsencrypt</h2>
-          <img data-src="client.gif">
-          <p>Official fully automated client with plugins for Apache and nginx that handle installation and certificate life-cycle management</p>
-        </section>
-
-        <section>
-          <h2>What we aren't doing</h2>
-          <img data-src="Frowning-Dog.png">
+          <h2>So what's the problem?</h2>
+          <img data-src="shrug.jpg" style="width:30%;">
           <ul>
-            <li>Wildcards (until WG decides on validation plan)</li>
-            <li>Longer than 90 day validity</li>
-            <li>EV or OV certificates (due to validation requirements)</li>
+            <li><b>The internet is untrustworthy</b></li>
+            <li>Passive sniffing and active modification are all too real</li>
+            <li>Only ~40% of initial requests are made over HTTPS</li>
+            <li>Getting and installing a certificate is <b>*confusing*</b></li>
+            <li>Every CA has it's own validation/issuance practices</li>
           </ul>
+
+          <aside class="notes">
+            <ul>
+              <li>passive monitoring of plaintext connections is a real problem, esp for passwords + other PII</li>
+              <li>plaintext connections also allow content to be silently altered in flight</li>
+              <li>despite 20 years of work, still has low usage rate vs HTTP :/</li>
+              <li>we ran tests that show getting + installing a cert can take 1+ hr even for experienced devs/sysadmins</li>
+              <li>every CA has it's own validation/issuance processes (which are generally proprietary) which makes life even more complicated</li>
+            </ul>
+          </aside>
         </section>
 
         <section>
-          <h2>Launch time line</h2>
+          <h2>Our solution</h2>
+          <img data-src="le-logo-bigger.svg" style="width:85%;">
           <ul>
-            <li>Planning begins -- ???</li>
-            <li>Development begins -- Dec 20, 2014 (mb?)</li>
-            <li>Closed beta begins -- Sept 11, 2015</li>
-            <li>Invite only beta beings -- Oct 19, 2015</li>
-            <li>Open beta begins -- Dec 3, 2015</li>
-            <li>Actual launch date -- ???</li>
+            <li>Free, open source, automated, and transparent CA</li>
+            <li>Based on a standardized protocol for domain validation, certificate issuance, and management (ACME)</li>
+            <li>Already public and widely trusted!</li>
           </ul>
+
+          <aside class="notes">
+            <ul>
+              <li>Completely open source (both server + client)</li>
+              <li>as little human interaction as nessecary, none needed for issuance, still need ops folks</li>
+              <li>publishing all certificates we issue to numerous CT logs</li>
+              <li>very few old devices (/old Java) don't have the DST root, otherwise p. much everyone trusts us due to cross-sig</li>
+              <li>ACME is still a draft, but should be finalized soon! /(mb adopted by more people)</li>
+            </ul>
+          </aside>
         </section>
 
         <section>
-          <h1>Hurdles</h1>
+          <h2>Sponsored by</h2>
+          <img data-src="le-sponsors.png" style="width: 80%;">
         </section>
 
         <section>
-          <img data-src="papers.jpg">
-            <p>PITR and WebTrust audits</p>
+          <h2>The CA/TLS ecosystem</h2>
+          <br/>
+          <p><i>What did we get ourselves into...</i></p>
+
+          <aside class="notes">
+            <ul>
+              <li>before talking about LE good to know a bit about CA/TLS ecosystem</li>
+              <li>by ecosystem i mean how CAs / browsers interact and create/validate certificates</li>
+              <li>it's really weird here guys</li>
+            </ul>
+          </aside>
+        </section>
+
+        <section data-background="better-graph2.png">
+          <aside class="notes">
+            <ul>
+              <li>graph of root and intermediate CAs</li>
+              <li>~1500 nodes, not all trusted CAs, but majority of important ones</li>
+              <li>LE is one of the two big magenta nodes in the bottom left corner</li>
+              <li>the number is very stupid, nodes are sized exponentially so small nodes have issued something like <100 certs</li>
+              <li>whereas big nodes are more like 100k+</li>
+            </ul>
+          </aside>
         </section>
 
         <section>
-          <h1>Adoption</h1>
+          <h2>CA/B forum</h2>
+          <img data-src="cab.jpg">
+          <p>The rule makers. Self governing body composed of trusted CAs and major browser vendors, 5 browsers + ~45 CAs</p>
+
+          <aside class="notes">
+            <ul>
+              <li>the CAs and browsers have opposing motivations, typically browsers are pro user, CAs are pro money</li>
+              <li>in order to get consensus the CA/B forum exists</li>
+              <li>5 browsers, rest CAs, browsers kinda wield more power because they are browsers</li>
+              <li>they write BRS which dictate how CAs must operate if they wish to be trusted by browsers</li>
+              <li>we're not members... yet (due to audit requirements :/)</li>
+            </ul>
+          </aside>
         </section>
 
         <section>
-          <h2>Observed adoption</h2>
+          <h2>Audits</h2>
+          <img data-src="papers.jpg" style="width:55%;">
+          <p><i>Ops team hard at work completing audits</i></p>
+          <ul>
+            <li>Required for root program inclusion + CA/B membership</li>
+          </ul>
+
+          <aside class="notes">
+            <ul>
+              <li>BRs require a bunch of stuff, including exhaustive audits</li>
+              <li>called webTrust, required to be completed to apply to join CA/B</li>
+              <li>audits aren't of codebase, but of various processes and controls to make sure they are up to industry standard</li>
+              <li>pain in the ass, but done soon hopefully</li>
+            </ul>
+          </aside>
         </section>
 
         <section>
-          <h2>CA league table</h2>
+          <h2>Validation levels</h2>
+          <img data-src="who-are-you.gif" style="width:50%;"><br/>
+          <ul>
+            <li>Domain</li>
+            <li>Organization (more complicated)</li>
+            <li>Extended (most complicated)</li>
+          </ul>
+
+          <aside class="notes">
+            <ul>
+              <li>CA/B decided on three levels of cert 'trust'</li>
+              <li>OV/EV added ~2007</li>
+              <li>each method refers to a different set of rules for identity validation</li>
+              <li>OV/EV difference is a SOME vs. THOROUGHLY for info vetting...</li>
+              <li>cryptographically all certs are the same (although browsers may treat them differently)</li>
+              <li>ov and ev are strange, really they only offer UI hints at high cost</li>
+            </ul>
+          </aside>
         </section>
 
         <section>
-          <h2>Cool peeps using our certs</h2>
+          <h2>Where does Let's Encrypt fit in?</h2>
+          <ul>
+            <li>Zero cost for issuance, renewal, and revocation (and everything else!)</li>
+            <li>DV only, no plans for EV or OV</li>
+            <li>Maximum 90 day validity periods</li>
+            <li>Multiple domain certificates using SANs</li>
+            <li>Issuing from intermediate cross-signed by IdenTrust</li>
+          </ul>
+
+          <aside class="notes">
+            <ul>
+              <li>we only plan to issue DV, OV and EV require way too much work for a automated system (i.e. we'd have to pay people)</li>
+              <li>90 day validity is to a. encourage good automation and b. makes the window for a compromised cert to be abused</li>
+              <li>multiple domain support is provided via SANs (instead of wildcards for now)</li>
+              <li>intermediate cross-signed by identrust in order to spread trust until root is accepted (and even then)</li>
+            </ul>
+          </aside>
         </section>
 
         <section>
-          <h2>Third party integrations</h2>
+          <h2>Opening the beta</h2>
+          <img data-src="le-stats.png" style="width:80%"><br/>
+          <ul>
+            <li>Moved from closed to public beta on Dec 3 2015</li>
+            <li>~1 issuance every two seconds for the first 12 hours</li>
+            <li>To date we've issued ~207,000 certificates across ~440,000 DNS names (~67% of which are unique)</li>
+          </ul>
+
+          <aside class="notes">
+            <ul>
+              <li>alpha (kinda) and closed beta from early sept. to dec. 3</li>
+              <li>issued ~20,000 certs while closed, doubled that in the first day of open beta!</li>
+              <li>during our first day we issued ~1 cert every 2 seconds</li>
+              <li>google style beta, it'll probably be running for a while...</li>
+            </ul>
+          </aside>
         </section>
 
         <section>
-          <h2>Third party clients</h2>
+          <h2>Top 10 issuers of currently unexpired certificates</h2>
+          <pre style="width:100%; font-size: 17pt;"><code>
+  # Unexpired        Issuer distinguished name
+  -----------        -------------------------
+  902398 (17.1560%)  COMODO ECC Domain Validation Secure Server CA 2
+  660539 (12.5579%)  COMODO RSA Domain Validation Secure Server CA
+  560662 (10.6591%)  Go Daddy Secure Certificate Authority - G2
+  359243 (6.8298%)   RapidSSL SHA256 CA - G3
+  <b>207934 (3.9532%)   Let's Encrypt Authority X1</b>
+  148530 (2.8238%)   AlphaSSL CA - SHA256 - G2
+  140973 (2.6801%)   GlobalSign Domain Validation CA - SHA256 - G3
+  130358 (2.4783%)   StartCom Class 1 Primary Intermediate Server CA
+  126857 (2.4118%)   Go Daddy Secure Certification Authority
+  125405 (2.3842%)   GlobalSign Organization Validation CA - G2
+          </code></pre>
+          <p>Already the largest free CA and 5th overall!</p>
+
+          <aside class="notes">
+            <ul>
+              <li>table of largest issuers of currently unexpired(!) leaf certificates</li>
+              <li>after being public for <1 month we are already 5th largest issuer</li>
+              <li>already the largest free issuer (other significant ones being StartSSL and WoSign)</li>
+            </ul>
+          </aside>
         </section>
 
         <section>
-          <h1>Future</h1>
+          <h2>Measuring adoption is hard...</h2>
+          <p><code style="font-size:4rem;">size != adoption</code></p>
+          <ul>
+            <li>Goal is to raise total % of HTTP connections going over HTTPS for everyone</li>
+            <li>Extremely hard to directly measure</li>
+            <li>Firefox telemetry for user usage rates</li>
+            <li>CT analysis tools for certificate deployment rates/trends</li>
+          </ul>
+
+          <aside class="notes">
+            <ul>
+              <li>there is no good definitive way of measuring % of requests going over HTTPS (in total) without sitting on a backbone and watching</li>
+              <li>can look at server side deployment rates / client usage rates to get a good idea of how LE certs are being utilized</li>
+              <li>only browser providing this telemetry is firefox, still a p. good sample size</li>
+              <li>have to talk directly to servers to get deployment rates</li>
+              <li>since we submit everything to CT that becomes a great way to get stats</li>
+            </ul>
+          </aside>
+        </section>
+
+        <section>
+          <h2>How are people using LE?</h2>
+          <ul>
+            <li>~120,000 individual registrations</li>
+            <li>~2 certificates per registration</li>
+            <li>~2 DNS names per certificate</li>
+            <li>~33% of names have overlapping certificates</li>
+            <li>~20% of certificates have duplicate name sets</li>
+            <li>~80% of names had no previous certificates in CT logs</li>
+            <li>~2,500 revocations so far (~1% of total issuances)</li>
+          </ul>
+
+          <aside class="notes">
+            <ul>
+              <li>num users</li>
+              <li>avg. names per cert is wildly lower than max of 100 (although a few are close...)</li>
+              <li>% repeated names due to CDN overlap, makes sense!</li>
+              <li>% certs with duplicate name sets most likely due to (silly) client testing against prod or resolving initial bugs in official client that caused re-issuance</li>
+            </ul>
+          </aside>
+        </section>
+
+        <section>
+          <h2>Server side adoption</h2>
+          <img data-src="ssl-hand.png" style="width:45%;"><br/>
+          <ul>
+            <li>~75% of names we've issued for are using their certificate</li>
+            <li>~8% of names we've issued for use a broken TLS setup</li>
+            <li>~3% of names we've issued for don't serve HTTPS at all</li>
+            <li>~45% of certificates are used by all their DNS names</li>
+          </ul>
+
+          <aside class="notes">
+            <ul>
+              <li>small TLS scanner attempts handshake with issued name and collects data</li>
+              <li>very good deployment rate!</li>
+              <li>% that is invalid means connection would fail, not too long chain or w/e</li>
+              <li>% that don't serve HTTPS may just be using different protocol! (mail, irc, etc)</li>
+            </ul>
+          </aside>
+        </section>
+
+        <section>
+          <h2>Client side adoption</h2>
+          <img data-src="firefox-adoption.png" style="width:65%;">
+          <p>~0.1% of successful TLS handshakes in Firefox nightlies</p>
+
+          <aside class="notes">
+            <ul>
+              <li>% is of around 120,000 handshakes</li>
+              <li>relatively small % of firefox handshakes but we're still in beta! so you know, that makes sense</li>
+              <li>(big people probably shouldn't be using us in super important/production systems)</li>
+              <li>we care about long tail not massive sites which would artificially boost our % of handshakes in firefox</li>
+            </ul>
+          </aside>
+        </section>
+
+        <section>
+          <h2>Clients</h2>
+          <img data-src="client-dist.png" style="width:70%;">
+          <ul>
+            <li>A client for (nearly) every deployment scenario</li>
+            <li>~66% of users using official client</li>
+            <li>Observed ~30 unique third-party clients</li>
+            <li>Both traditional clients + more complex designs</li>
+          </ul>
+
+          <aside class="notes">
+            <ul>
+              <li>bunch of clients + libs popped up since public beta for various different deployment scenarios</li>
+              <li>stuff in python, ruby, bash, perl, php, js, and .NET/windows land</li>
+              <li>website based ACME client (+openssl but still, webCrypto is hard)</li>
+              <li>web server with built in ACME/LE support, gets cert at startup if one isn't present</li>
+            </ul>
+          </aside>
+        </section>
+
+        <section>
+          <h2>Hosting providers + CDNs</h2>
+          <img data-src="kamaji.gif" style="width:65%;">
+          <ul>
+            <li>Akamai, KeyCDN, Dreamhost, Cyon, Pressjitsu, and more have/are developing integrations</li>
+            <li>We expect these types of providers to make up the majority of usage in the long term</li>
+          </ul>
+
+          <aside class="notes">
+            <ul>
+              <li>expect + encourage large hosting providers + CDNs to closely integrate with LE</li>
+              <li>bunch of our sponsors + other third parties (dreamhost) are developing/have implemented LE</li>
+              <li>will be large growth factor for LE (prob biggest in long term)</li>
+            </ul>
+          </aside>
+        </section>
+
+        <section>
+          <h2>Future</h2>
+          <video autoplay="" muted="" style="max-height:100%;max-width:100%;" loop=""><source type="video/webm" src="//i.imgur.com/jQJUnVJ.webm" data-reactid=".2.0.0.$jQJUnVJ=1gif.0"></video>
+          <ul>
+            <li>DNS based validation challenge</li>
+            <li>Proof of possession challenge</li>
+            <li>Multi-path validation</li>
+          </ul>
+
+          <aside class="notes">
+            <ul>
+              <li><b>lots</b> of work still to do</li>
+              <li>implement DNS challenge to help integration options</li>
+              <li>implement POP challenge to incr. validation/issuance safety (still flux in design)</li>
+              <li>implement multi path validation to try to prevent network local attacks!</li>
+            </ul>
+          </aside>
         </section>
 
         <section>
           <h1>Thanks!</h1>
-          <h3>Questions?</h3>
+					<img data-src="le-logo.png" style="width:20%;">
+          <h3>Any questions?</h3>
           <p>
             roland@eff.org<br/><small style="font-family: monospace;">B244 C64A 677C AFBF 051B 4029 3B5F BC45 DC51 7F79</small><br/>
-            ca-dev@letsencrypt.org<br/>
-            client-dev@letsencrypt.org<br/>
-            <a>https://letsencrypt.org/ </a><br/>
-            <a>https://github.com/letsencrypt</a>
+            <a href="https://letsencrypt.org">letsencrypt.org</a><br/>
+            <a href="https://github.com/letsencrypt">github.com/letsencrypt</a>
           </p>
-
         </section>
 
 			</div>
@@ -230,7 +431,6 @@
 					{ src: '../reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
 					{ src: '../reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
 					{ src: '../reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-					{ src: '../reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
 					{ src: '../reveal.js/plugin/zoom-js/zoom.js', async: true },
 					{ src: '../reveal.js/plugin/notes/notes.js', async: true }
 				]
